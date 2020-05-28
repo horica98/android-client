@@ -11,35 +11,47 @@ import java.util.*
 import io.reactivex.Observable
 import okhttp3.Response
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import kotlin.collections.HashMap
+import javax.xml.datatype.DatatypeConstants.SECONDS
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
+import com.google.gson.GsonBuilder
+import com.google.gson.Gson
+
+
 
 
 object RestClient {
-    private const val URL = "http://10.0.2.2:3000/api/file/"
+//    private const val URL = "http://10.0.2.2:3000/api/file/"
+//    private const val URL = "http://192.168.0.105:3000/"
+    private const val URL = "http://172.20.10.5:3000/"
 
+//    private const val URL = "http://192.168.43.38:3000/"
     interface Service {
 
 
-//        @POST("")
-//        fun uploadPhoto(@Body fileName: String, @Body file: String): Observable<String>
-
-        @Multipart
-        @POST("")
+        @POST("api/file")
         fun upload(
-            @PartMap map: Map<String, RequestBody>
-        ): Call<ResponseBody>
+//            @PartMap map: HashMap<String, RequestBody>
+            @Body fileEntity: FileEntity
+        ): Observable<FileResult>
 
-//        @Multipart
-//        @POST("api/update/enfant/photo/{id}")
-//        fun uploadImage(
-//            @Path("id") enfantId: Int,
-//            @Part file: MultipartBody.Part,
-//            @Part("image") requestBody: RequestBody
-//        ): Call<ResponseBody>
     }
+
+    var okHttpClient = OkHttpClient().newBuilder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .build()
+
+    var gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     val retrofit = Retrofit.Builder()
         .baseUrl(URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 
