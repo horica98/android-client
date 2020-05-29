@@ -2,15 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText"
+<!--    <EditText-->
+<!--        android:id="@+id/editText"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="435dp"-->
+<!--        android:ems="10"-->
+<!--        android:gravity="start|top"-->
+<!--        android:inputType="textMultiLine" />-->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="435dp"
-        android:ems="10"
+        android:layout_height="500dp"
         android:gravity="start|top"
-        android:inputType="textMultiLine" />
+        app:boxStrokeColor="@color/colorPrimary"
+        app:boxStrokeWidth="2dp"
+
+        app:hintAnimationEnabled="false">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,6 +42,7 @@
             android:layout_width="100px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            app:backgroundTint="@color/colorPrimary"
             android:text="Compare" />
 
         <Button
@@ -30,6 +50,7 @@
             android:layout_width="100px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            app:backgroundTint="@color/colorPrimary"
             android:text="Compile" />
     </LinearLayout>
 

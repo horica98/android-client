@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         upload.visibility = View.GONE
         gallery.visibility = View.GONE
         imageView.visibility = View.GONE
+        cardView.visibility = View.GONE
 
         val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
 
@@ -224,6 +225,7 @@ class MainActivity : AppCompatActivity() {
                     upload.visibility = View.VISIBLE
                     gallery.visibility = View.VISIBLE
                     imageView.visibility = View.VISIBLE
+                    cardView.visibility = View.VISIBLE
 
                     moveToCodeActivity(result.text, result.googleText)
 
