@@ -1,24 +1,16 @@
-package com.example.android_app
+package com.example.android_app.networking
 
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.Call
+import com.example.android_app.models.CompilationText
+import com.example.android_app.models.FileEntity
+import com.example.android_app.models.FileResult
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import java.util.*
 import io.reactivex.Observable
-import okhttp3.Response
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import kotlin.collections.HashMap
-import javax.xml.datatype.DatatypeConstants.SECONDS
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import com.google.gson.GsonBuilder
-import com.google.gson.Gson
-
-
 
 
 object RestClient {
@@ -36,7 +28,13 @@ object RestClient {
             @Body fileEntity: FileEntity
         ): Observable<FileResult>
 
-    }
+        @POST("api/file/compile")
+        fun compile(
+            @Body compilationText: CompilationText
+        ): Observable<CompilationText>
+
+
+}
 
     var okHttpClient = OkHttpClient().newBuilder()
         .connectTimeout(60, TimeUnit.SECONDS)
@@ -55,6 +53,7 @@ object RestClient {
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 
-    val service: Service = retrofit.create(Service::class.java)
+    val service: Service = retrofit.create(
+        RestClient.Service::class.java)
 
 }

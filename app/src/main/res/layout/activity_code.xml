@@ -39,7 +39,7 @@
 
         <Button
             android:id="@+id/compare"
-            android:layout_width="100px"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:backgroundTint="@color/colorPrimary"
@@ -47,11 +47,19 @@
 
         <Button
             android:id="@+id/compile"
-            android:layout_width="100px"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:backgroundTint="@color/colorPrimary"
             android:text="Compile" />
+
+        <Button
+            android:id="@+id/copy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:backgroundTint="@color/colorPrimary"
+            android:text="Copy" />
     </LinearLayout>
 
 </LinearLayout>

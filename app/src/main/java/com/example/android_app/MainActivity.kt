@@ -9,13 +9,14 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android_app.models.FileEntity
+import com.example.android_app.networking.RestClient
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -25,11 +26,15 @@ import com.ocaterinca.ocaterinca.utils.ImageUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.io.IOException
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.*
 import okio.Buffer
+import org.json.JSONObject
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,7 +61,45 @@ class MainActivity : AppCompatActivity() {
 
         upload.setOnClickListener { preupload() }
 
+        val clientWebsoket = OkHttpClient.Builder()
+            .readTimeout(3, TimeUnit.SECONDS)
+            .build()
+        val request = Request.Builder()
+            .url("ws://192.168.0.105:3000")
+            .build()
+        val wsListener = EchoWebSocketListener()
+        clientWebsoket.newWebSocket(request, wsListener) // this provide to make 'Open ws connection'
+
+        // Trigger shutdown of the dispatcher's executor so this process can exit cleanly.
+        clientWebsoket.dispatcher().executorService().shutdown()
+
     }
+
+    inner class EchoWebSocketListener : WebSocketListener() {
+        lateinit var webSocket: WebSocket
+        override fun onOpen(webSocket: WebSocket, response: Response) {
+            this.webSocket = webSocket
+            webSocket.send("Hello, there!")
+            webSocket.send("What's up?")
+        }
+
+        override fun onMessage(webSocket: WebSocket?, text: String?) {
+            GlobalScope.launch(Dispatchers.Main) {
+
+                val s: String = JSONObject(text).getString("status")
+//                    .getString("id").toString() + " " +
+//                        JSONObject(text).getString("table")+ " " +
+//                        JSONObject(text).getString("status")+ " " +
+//                        JSONObject(text).getString("type")+ " " +
+//                        JSONObject(text).getString("time").toString() + " " +
+//                        JSONObject(text).getString("details").toString()
+                Toast.makeText(this@MainActivity, s, Toast.LENGTH_LONG).show()
+
+            }
+        }
+    }
+
+
 
     private fun preupload() {
         progressBar.visibility = View.VISIBLE
@@ -213,7 +256,10 @@ class MainActivity : AppCompatActivity() {
 //            map["fileName"] = "horea"
             Log.d("horea", map.toString())
             val baits = ImageUtils.resizeImageKeepAspectRatio(postPath, 2000, 2000).base64
-            val fileEntity = FileEntity(fileName = "Gigi", file = "data:image/jpeg;base64,$baits")
+            val fileEntity = FileEntity(
+                fileName = "Gigi",
+                file = "data:image/jpeg;base64,$baits"
+            )
             Log.d("gigi", fileEntity.toString())
             RestClient.service.upload(fileEntity)
                 .subscribeOn(Schedulers.io())
@@ -231,7 +277,17 @@ class MainActivity : AppCompatActivity() {
 
                 }
                     ,
-                    { throwable -> Log.d("gigi", "Pl: " + throwable.message!!) })
+                    { throwable ->
+                        Log.d("gigi", "Pl: " + throwable.message!!)
+                        progressBar.visibility = View.GONE
+                        takePhoto.visibility = View.VISIBLE
+                        upload.visibility = View.VISIBLE
+                        gallery.visibility = View.VISIBLE
+                        imageView.visibility = View.VISIBLE
+                        cardView.visibility = View.VISIBLE
+
+                        Toast.makeText(this, throwable.message!!, Toast.LENGTH_LONG).show()
+                    })
 
 
 //        }

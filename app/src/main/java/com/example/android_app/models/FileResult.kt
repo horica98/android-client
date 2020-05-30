@@ -1,4 +1,4 @@
-package com.example.android_app
+package com.example.android_app.models
 
 data class FileResult(
     val text: String,
