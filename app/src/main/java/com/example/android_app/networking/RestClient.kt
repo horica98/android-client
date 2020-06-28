@@ -15,10 +15,11 @@ import com.google.gson.GsonBuilder
 
 object RestClient {
 //    private const val URL = "http://10.0.2.2:3000/api/file/"
-    private const val URL = "http://192.168.0.105:3000/"
+//    private const val URL = "http://172.20.10.5:3000/"
 //    private const val URL = "http://172.20.10.5:3000/"
 
-//    private const val URL = "http://192.168.43.38:3000/"
+//    private const val URL = "http://192.168.0.102:3000/"
+    private const val URL = "http://172.20.10.5:3000/"
     interface Service {
 
 
