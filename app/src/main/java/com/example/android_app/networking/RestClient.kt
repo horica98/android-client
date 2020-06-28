@@ -22,10 +22,8 @@ object RestClient {
     private const val URL = "http://172.20.10.5:3000/"
     interface Service {
 
-
         @POST("api/file")
         fun upload(
-//            @PartMap map: HashMap<String, RequestBody>
             @Body fileEntity: FileEntity
         ): Observable<FileResult>
 
@@ -33,7 +31,6 @@ object RestClient {
         fun compile(
             @Body compilationText: CompilationText
         ): Observable<CompilationText>
-
 
 }
 

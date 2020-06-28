@@ -87,14 +87,7 @@ class MainActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.Main) {
 
                 val s: String = JSONObject(text).getString("status")
-//                    .getString("id").toString() + " " +
-//                        JSONObject(text).getString("table")+ " " +
-//                        JSONObject(text).getString("status")+ " " +
-//                        JSONObject(text).getString("type")+ " " +
-//                        JSONObject(text).getString("time").toString() + " " +
-//                        JSONObject(text).getString("details").toString()
                 Toast.makeText(this@MainActivity, s, Toast.LENGTH_LONG).show()
-
             }
         }
     }
